@@ -4,7 +4,7 @@ import Home from "../pages/Home";
 import ProductDetail from "../pages/ProductDetail";
 import Login from "../pages/Login";
 import Cart from "../pages/Cart";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "./privateRoute";
 
 const router = createBrowserRouter([
   {
