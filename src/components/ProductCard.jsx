@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+
+  const handleDetailClick = () => {
+    navigate(`/product/${product.id}`);
+  };
+
   return (
     <div className="card bg-base-100 shadow-xl w-full max-w-xs mx-2">
       <figure>
@@ -11,7 +18,9 @@ const ProductCard = ({ product }) => {
         />
       </figure>
       <div className="card-body pt-4">
-        <p className="text-gray-500 badge badge-outline">{product.category}</p>
+        <p className="text-gray-500 badge badge-outline line-clamp-1">
+          {product.category}
+        </p>
         <h2 className="card-title line-clamp-2 h-14">{product.title}</h2>
         <p className="font-bold text-2xl">${product.price}</p>
 
@@ -57,7 +66,10 @@ const ProductCard = ({ product }) => {
         </span>
 
         <div className="card-actions justify-between gap-6">
-          <button className="btn flex items-center flex-1 btn-primary">
+          <button
+            onClick={handleDetailClick}
+            className="btn flex items-center flex-1 btn-primary"
+          >
             Detail
           </button>
           <button className="btn flex items-center flex-1 btn-primary">

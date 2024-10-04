@@ -1,8 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import icon from "../assets/image/icon.png";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  const isLoggedIn = !!localStorage.getItem("token"); // check login
+
   return (
     <div className="navbar bg-base-100 shadow-lg px-4">
       <div className="flex-1">
@@ -34,11 +43,22 @@ const Navbar = () => {
               </span>
             </Link>
           </li>
-          <li>
-            <Link to="/login" className="ml-4 btn btn-outline btn-primary">
-              Login
-            </Link>
-          </li>
+          {isLoggedIn ? (
+            <li>
+              <button
+                className="ml-4 btn btn-outline btn-error"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </li>
+          ) : (
+            <li>
+              <Link to="/login" className="ml-4 btn btn-outline btn-primary">
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </div>
