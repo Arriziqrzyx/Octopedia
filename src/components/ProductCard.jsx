@@ -1,13 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
-  const navigate = useNavigate();
-
-  const handleDetailClick = () => {
-    navigate(`/product/${product.id}`);
-  };
-
   return (
     <div className="card bg-base-100 shadow-xl w-full max-w-xs mx-2">
       <figure>
@@ -66,15 +60,15 @@ const ProductCard = ({ product }) => {
         </span>
 
         <div className="card-actions justify-between gap-6">
-          <button
-            onClick={handleDetailClick}
+          <Link
+            to={`/product/${product.id}`}
             className="btn flex items-center flex-1 btn-primary"
           >
             Detail
-          </button>
-          <button className="btn flex items-center flex-1 btn-primary">
+          </Link>
+          <Link to="/cart" className="btn flex items-center flex-1 btn-primary">
             Add to Cart
-          </button>
+          </Link>
         </div>
       </div>
     </div>
