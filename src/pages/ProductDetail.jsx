@@ -1,22 +1,32 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../store/productSlice";
 import ProductCard from "../components/ProductCard";
+import { addToCartWithQuantity } from "../store/cartSlice"; // Import action baru
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const { items: products, loading } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
 
   // Cari produk berdasarkan ID
   const product = products.find((product) => product.id === parseInt(id));
 
-  // useEffect(() => {
-  //   if (!products.length) {
-  //     dispatch(fetchProducts());
-  //   }
-  // }, [dispatch, products]);
+  // Mendapatkan jumlah produk yang ada di keranjang
+  const existingProduct = useSelector((state) =>
+    state.cart.items.find((item) => item.id === product.id)
+  );
+  const currentQuantity = existingProduct ? existingProduct.quantity : 0;
+
+  const handleAddToCart = () => {
+    if (product) {
+      const quantity =
+        parseInt(
+          document.getElementById(`quantity-input-${product.id}`).value
+        ) || 1; // Ambil nilai dari input
+      dispatch(addToCartWithQuantity({ product, quantity })); // Dispatch action baru
+    }
+  };
 
   if (loading) {
     return (
@@ -123,9 +133,55 @@ const ProductDetail = () => {
                 {product.rating.rate} ({product.rating.count} reviews)
               </span>
 
-              <button className="btn btn-primary w-auto mt-4 self-start px-8">
-                Add to Cart
-              </button>
+              <div className="flex items-center gap-2 mt-4">
+                <button
+                  onClick={() => {
+                    const inputElement = document.getElementById(
+                      `quantity-input-${product.id}`
+                    );
+                    inputElement.value = Math.max(
+                      1,
+                      (parseInt(inputElement.value) || 0) - 1
+                    ); // Decrease quantity
+                  }}
+                  className="btn btn-outline"
+                >
+                  -
+                </button>
+                <input
+                  id={`quantity-input-${product.id}`}
+                  type="number"
+                  defaultValue={1}
+                  min={1}
+                  max={product.stock}
+                  className="input input-bordered w-16 text-center"
+                  onChange={(e) => {
+                    if (parseInt(e.target.value) > product.stock) {
+                      e.target.value = product.stock;
+                    }
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    const inputElement = document.getElementById(
+                      `quantity-input-${product.id}`
+                    );
+                    inputElement.value = parseInt(inputElement.value) + 1; // Increase quantity
+                  }}
+                  className="btn btn-outline"
+                >
+                  +
+                </button>
+                <button
+                  onClick={handleAddToCart}
+                  className={`btn btn-primary mt-4 ${
+                    currentQuantity >= product.stock ? "btn-disabled" : ""
+                  }`}
+                  disabled={currentQuantity >= product.stock}
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AUTH_API } from "../utils/authConfig";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ const Login = () => {
     setSuccessMessage("");
 
     try {
-      const response = await axios.post("https://fakestoreapi.com/auth/login", {
+      const response = await axios.post(AUTH_API.LOGIN_URL, {
         username: email,
         password: password,
       });
@@ -28,7 +29,7 @@ const Login = () => {
         document.getElementById("loginModal").showModal();
         setTimeout(() => {
           navigate("/");
-        }, 1000);
+        }, 1500);
       }
     } catch (error) {
       setErrorMessage(
