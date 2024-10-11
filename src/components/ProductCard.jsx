@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
+import loadStockFromLocalStorage from "../utils/loadStock";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -21,6 +22,10 @@ const ProductCard = ({ product }) => {
     state.cart.items.find((item) => item.id === product.id)
   );
   const currentQuantity = existingProduct ? existingProduct.quantity : 0;
+
+  // Ambil stok dari localStorage untuk produk ini
+  const stock = loadStockFromLocalStorage();
+  const availableStock = stock[product.id];
 
   return (
     <div className="card bg-base-100 shadow-xl w-full max-w-xs mx-2">
@@ -81,7 +86,7 @@ const ProductCard = ({ product }) => {
           </p>
         </div>
         <p className="font-semibold">
-          Stock: <span className="text-green-600">{product.stock}</span>
+          Stock: <span className="text-green-600">{availableStock}</span>
         </p>
 
         <div className="card-actions justify-between gap-6">
@@ -94,9 +99,9 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleAddToCart}
             className={`btn flex items-center flex-1 btn-primary ${
-              currentQuantity >= product.stock ? "btn-disabled" : ""
+              currentQuantity >= availableStock ? "btn-disabled" : ""
             }`} // Nonaktifkan jika quantity >= stok
-            disabled={currentQuantity >= product.stock} // Nonaktifkan jika quantity >= stok
+            disabled={currentQuantity >= availableStock} // Nonaktifkan jika quantity >= stok
           >
             Add to Cart
           </button>
