@@ -1,13 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../store/cartSlice"; // Import addToCart action
+import { addToCart } from "../store/cartSlice";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
-    dispatch(addToCart(product)); // Dispatch action untuk menambahkan produk ke cart
+    const isAuthenticated = !!localStorage.getItem("token");
+
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      dispatch(addToCart(product));
+    }
   };
 
   const existingProduct = useSelector((state) =>
