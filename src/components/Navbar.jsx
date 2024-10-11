@@ -1,9 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "../assets/image/icon.png";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const cartItems = useSelector((state) => state.cart.items);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -11,9 +13,13 @@ const Navbar = () => {
   };
 
   const isLoggedIn = !!localStorage.getItem("token"); // check login
+  const totalQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
-    <div className="navbar bg-base-100 shadow-lg px-4">
+    <div className="navbar bg-base-100 shadow-lg px-4 fixed z-50">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost normal-case text-xl gap-0">
           <img src={icon} alt="icon" className="w-10 h-10 mt-1" />
@@ -40,7 +46,7 @@ const Navbar = () => {
               </svg>
               {isLoggedIn && (
                 <span className="badge badge-sm badge-primary absolute top-0 right-0">
-                  8
+                  {totalQuantity}
                 </span>
               )}
             </Link>

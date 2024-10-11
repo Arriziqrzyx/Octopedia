@@ -5,8 +5,14 @@ import axios from "axios";
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
-    const response = await axios.get("https://fakestoreapi.com/products");
-    return response.data;
+    const productsUrl = import.meta.env.VITE_API_PRODUCTS;
+    const response = await axios.get(productsUrl);
+    // Map produk dan tambahkan properti stock
+    const productsWithStock = response.data.map((product) => ({
+      ...product,
+      stock: 20,
+    }));
+    return productsWithStock;
   }
 );
 

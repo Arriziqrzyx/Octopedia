@@ -13,27 +13,30 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-wrap justify-center gap-6 pt-16">
-        {Array(8)
-          .fill()
-          .map((_, i) => (
-            <div
-              key={i}
-              className="card bg-base-100 shadow-xl w-full max-w-sm mx-auto"
-            >
-              <figure>
-                <div className="skeleton h-72 w-full"></div>
-              </figure>
-              <div className="card-body pt-4">
-                <div className="skeleton h-6 w-1/2 mb-2"></div>
-                <div className="skeleton h-4 w-full mb-2"></div>
-                <div className="skeleton h-4 w-full mb-4"></div>
-                <div className="skeleton h-8 w-1/4 mb-2"></div>
-                <div className="skeleton h-5 w-1/3"></div>
+      <>
+        <h1 className="text-3xl font-bold mb-8 text-center">Product List</h1>
+        <div className="flex flex-wrap justify-center gap-6">
+          {Array(8)
+            .fill()
+            .map((_, i) => (
+              <div
+                key={i}
+                className="card bg-base-100 shadow-xl w-full max-w-xs mx-2"
+              >
+                <figure>
+                  <div className="skeleton h-72 w-full"></div>
+                </figure>
+                <div className="card-body pt-4">
+                  <div className="skeleton h-6 w-1/2 mb-2"></div>
+                  <div className="skeleton h-6 w-full mb-2"></div>
+                  <div className="skeleton h-6 w-full mb-4"></div>
+                  <div className="skeleton h-8 w-1/4 mb-2"></div>
+                  <div className="skeleton h-10 w-full"></div>
+                </div>
               </div>
-            </div>
-          ))}
-      </div>
+            ))}
+        </div>
+      </>
     );
   }
 
@@ -43,14 +46,14 @@ const Home = () => {
   }
 
   return (
-    <div>
+    <>
       <h1 className="text-3xl font-bold mb-8 text-center">Product List</h1>
       <div className="flex flex-wrap justify-center gap-6 pb-4">
         {items.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
