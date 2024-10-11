@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import { addToCartWithQuantity } from "../store/cartSlice"; // Import action baru
@@ -8,6 +8,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const { items: products, loading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Cari produk berdasarkan ID
   const product = products.find((product) => product.id === parseInt(id));
@@ -19,12 +20,18 @@ const ProductDetail = () => {
   const currentQuantity = existingProduct ? existingProduct.quantity : 0;
 
   const handleAddToCart = () => {
-    if (product) {
-      const quantity =
-        parseInt(
-          document.getElementById(`quantity-input-${product.id}`).value
-        ) || 1; // Ambil nilai dari input
-      dispatch(addToCartWithQuantity({ product, quantity })); // Dispatch action baru
+    const isAuthenticated = !!localStorage.getItem("token");
+
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      if (product) {
+        const quantity =
+          parseInt(
+            document.getElementById(`quantity-input-${product.id}`).value
+          ) || 1; // Ambil nilai dari input
+        dispatch(addToCartWithQuantity({ product, quantity })); // Dispatch action baru
+      }
     }
   };
 
